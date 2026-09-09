@@ -103,6 +103,35 @@ export const copy = {
       censusLede:
         'The same rules, run against every covered feed this second. A zero is a finding, not an empty slot: it says no feed is in that state at the moment you are reading.',
       censusUncountable: 'Needs a deployed adapter',
+      censusFootnote:
+        'Desync and Unsafe carry no count: one needs the adapter\u2019s own committed snapshot and the other is a property of a deployed contract, so neither can be read from feed data. Showing them as zero would claim knowledge we do not have.',
+
+      // A fuse conducts, then holds, then blows. The adapter has the same four
+      // answers, and every state belongs to exactly one of them — which is the
+      // section's own metaphor, made visible instead of described.
+      tiersHeading: 'Four answers, and every state is one of them',
+      tiers: [
+        {
+          name: 'Passes it through',
+          body: 'The price is fresh and nothing is staged. The adapter answers with the feed\u2019s own number and adds nothing to it.',
+          states: ['Normal'],
+        },
+        {
+          name: 'Serves the last price',
+          body: 'The feed is silent but every flag is clean and the continuity invariant holds. The last published price still stands: silence is not the same as breakage.',
+          states: ['Quiet'],
+        },
+        {
+          name: 'Holds the pre-window price',
+          body: 'Something makes the current number untrustworthy. The adapter answers with the price that stood before the window opened \u2014 the same number for everyone, so no position enters the window healthier than it was.',
+          states: ['Corporate action', 'Desync', 'Token halted', 'Past heartbeat'],
+        },
+        {
+          name: 'Refuses to answer',
+          body: 'The protection budget is spent. The adapter reverts rather than serve a number it can no longer stand behind. Breaking loudly beats lying quietly.',
+          states: ['Unsafe'],
+        },
+      ],
       invariantHeading: 'Why a held price cannot be abused',
       invariantBody:
         'The held price is the one that stood before the window opened, and it is the same for everyone. A position cannot enter the window healthier than it was. Anyone already underwater stays underwater and stays liquidatable. The window removes the artefact, not the debt.',
@@ -121,6 +150,7 @@ export const copy = {
       // Every boundary carries what covers it. A limitation with no answer is
       // an apology; a limitation with an answer is a scope.
       coverLabel: 'What covers it',
+      coverageLabel: 'Assets with an on-chain price',
       items: [
         {
           title: 'It does not stop new borrowing against a held price',

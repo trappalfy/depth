@@ -23,7 +23,7 @@ export default async function Page() {
         <Mechanism snapshot={snapshot} />
         <MotifBand />
         <Integration />
-        <Limits />
+        <Limits snapshot={snapshot} />
         <Contact />
       </main>
       <SiteFooter />

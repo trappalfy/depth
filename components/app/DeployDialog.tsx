@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import type { Abi, Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { TxButton } from '@/components/app/TxButton'
+import { ActionButton } from '@/components/ui/ActionButton'
 import { Modal } from '@/components/ui/Modal'
 import { StatusPill } from '@/components/ui/StatusPill'
 import { useBlockedReason, useDeployment } from '@/components/wallet/useDeployment'
@@ -174,22 +175,40 @@ export function DeployDialog({ row, onClose }: { row: FeedRow; onClose: () => vo
       </label>
 
       <div className="mt-5 flex items-start gap-4">
-        <TxButton
-          label={copy.app.deploy.confirm}
-          variant="primary"
-          blockedReason={blockedReason}
-          onSuccess={onClose}
-          request={
-            state.kind === 'live' && acknowledged
-              ? {
-                  address: state.factory,
-                  abi: adapterFactoryAbi as unknown as Abi,
-                  functionName: 'deploy',
-                  args: [row.token, row.feed],
-                }
-              : null
-          }
-        />
+        {state.kind === 'live' ? (
+          <TxButton
+            label={copy.app.deploy.confirm}
+            variant="primary"
+            blockedReason={blockedReason}
+            onSuccess={onClose}
+            request={
+              acknowledged
+                ? {
+                    address: state.factory,
+                    abi: adapterFactoryAbi as unknown as Abi,
+                    functionName: 'deploy',
+                    args: [row.token, row.feed],
+                  }
+                : null
+            }
+          />
+        ) : (
+          // Before the factory exists there is no transaction to send and no
+          // wallet condition worth reporting — connecting one would not help.
+          // The button presses and nothing happens: nothing is sent, nothing is
+          // simulated, and no state changes that could be read as a deploy. The
+          // page still says where it stands, in the Preview badge above and in
+          // every field of this form that reads "at deploy".
+          <ActionButton
+            variant="primary"
+            disabled={!acknowledged}
+            title={acknowledged ? undefined : copy.app.deploy.mustAcknowledge}
+            onClick={() => {}}
+            className="h-[38px] px-4 text-[15px]"
+          >
+            {copy.app.deploy.confirm}
+          </ActionButton>
+        )}
         <button
           type="button"
           onClick={onClose}
@@ -198,6 +217,11 @@ export function DeployDialog({ row, onClose }: { row: FeedRow; onClose: () => vo
           {copy.app.deploy.cancel}
         </button>
       </div>
+
+      {/* In the live path TxButton prints this itself, under the button. */}
+      {state.kind !== 'live' && !acknowledged && (
+        <p className="mt-3 text-[12px] text-fg-faint">{copy.app.deploy.mustAcknowledge}</p>
+      )}
 
       <p className="mt-5 text-[12px] text-fg-faint">{copy.app.deploy.gasNote}</p>
     </Modal>

@@ -11,7 +11,10 @@ export function ConnectModal({ onClose }: { onClose: () => void }) {
   const mounted = useMounted()
   const connect = useConnect()
   const connectors = useConnectors()
-  const wallets = pickWallets(connectors)
+  // Safe only works when the page is embedded in the Safe app. Checking the
+  // frame here keeps pickWallets pure and testable.
+  const inIframe = mounted && window.self !== window.top
+  const wallets = pickWallets(connectors, { inIframe })
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

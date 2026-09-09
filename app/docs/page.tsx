@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { copy } from '@/content/copy.en'
+
+export const metadata: Metadata = {
+  title: 'Documentation',
+  description:
+    'The adapter interface, the states it can be in, and the three lines that gate new borrowing on a normal status.',
+}
 
 const INTERFACE = `interface IStockOracleAdapter is AggregatorV3Interface {
   enum Status { NORMAL, OFF_HOURS, CORPORATE_ACTION, DESYNC, TOKEN_HALTED, SEQUENCER_DOWN, UNSAFE }

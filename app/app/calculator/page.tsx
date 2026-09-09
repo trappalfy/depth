@@ -1,6 +1,13 @@
+import type { Metadata } from 'next'
 import { Calculator } from '@/components/app/Calculator'
 import { copy } from '@/content/copy.en'
 import { readSnapshot } from '@/lib/snapshot'
+
+export const metadata: Metadata = {
+  title: 'Calculator',
+  description:
+    'What a convention mistake costs: the same position valued four ways, against live prices and multipliers from Robinhood Chain.',
+}
 
 export const revalidate = 30
 

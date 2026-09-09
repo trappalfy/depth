@@ -18,6 +18,11 @@ import sharp from 'sharp'
 
 const SRC = 'assets/depth-logo.png'
 const OUT = 'public/depth-mark.png'
+/** Next serves app/icon.png as the favicon and app/apple-icon.png to iOS. */
+const ICON = 'app/icon.png'
+const APPLE = 'app/apple-icon.png'
+const ICON_SIZE = 256
+const APPLE_SIZE = 180
 
 /** At or below this luminance a pixel is ink: fully opaque. */
 const INK = 24
@@ -69,13 +74,54 @@ async function main(): Promise<void> {
   }
 
   const outWidth = Math.round((cropWidth / cropHeight) * OUT_HEIGHT)
-  await sharp(rgba, { raw: { width, height, channels: 4 } })
-    .extract({ left: minX, top: minY, width: cropWidth, height: cropHeight })
+  const mark = sharp(rgba, { raw: { width, height, channels: 4 } }).extract({
+    left: minX,
+    top: minY,
+    width: cropWidth,
+    height: cropHeight,
+  })
+
+  await mark
+    .clone()
     .resize({ width: outWidth, height: OUT_HEIGHT, fit: 'fill', kernel: 'lanczos3' })
     .png({ compressionLevel: 9 })
     .toFile(OUT)
 
   console.log(`${OUT}: ${outWidth}x${OUT_HEIGHT}, ${statSync(OUT).size} bytes`)
+
+  /** Centres the mark on a square canvas at the given width fraction. */
+  async function square(size: number, fill: number, background: string): Promise<Buffer> {
+    const markWidth = Math.round(size * fill)
+    const markHeight = Math.round(markWidth / (cropWidth / cropHeight))
+    const scaled = await mark
+      .clone()
+      .resize({ width: markWidth, height: markHeight, fit: 'fill', kernel: 'lanczos3' })
+      .png()
+      .toBuffer()
+    return sharp({
+      create: { width: size, height: size, channels: 4, background },
+    })
+      .composite([
+        {
+          input: scaled,
+          left: Math.round((size - markWidth) / 2),
+          top: Math.round((size - markHeight) / 2),
+        },
+      ])
+      .png({ compressionLevel: 9 })
+      .toBuffer()
+  }
+
+  // The browser tab. Transparent, so the mark sits directly on whatever the
+  // browser paints behind it, and wide in the frame — a favicon is read at
+  // 16px, where polite padding costs more than it buys.
+  await sharp(await square(ICON_SIZE, 0.9, '#00000000')).toFile(ICON)
+  console.log(`${ICON}: ${ICON_SIZE}x${ICON_SIZE}, ${statSync(ICON).size} bytes`)
+
+  // The iOS home screen. This one keeps the ink ground: iOS composites a
+  // transparent icon onto white, and a white mark on white is nothing at all.
+  await sharp(await square(APPLE_SIZE, 0.72, '#0A0A0A')).toFile(APPLE)
+  console.log(`${APPLE}: ${APPLE_SIZE}x${APPLE_SIZE}, ${statSync(APPLE).size} bytes`)
 }
 
 main().catch((error: unknown) => {

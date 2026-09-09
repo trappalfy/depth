@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BoardTable } from '@/components/board/BoardTable'
 import { SiteFooter } from '@/components/layout/SiteFooter'
@@ -5,6 +6,12 @@ import { StalenessChart } from '@/components/sections/StalenessChart'
 import { copy } from '@/content/copy.en'
 import { readSnapshot } from '@/lib/snapshot'
 import { STATUS_NOTE, type Status } from '@/lib/status'
+
+export const metadata: Metadata = {
+  title: 'Live feed status',
+  description:
+    'Every tokenized equity on Robinhood Chain with an on-chain price feed, classified by the rules the adapter applies, read from mainnet.',
+}
 
 export const revalidate = 30
 

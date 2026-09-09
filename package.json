@@ -8,7 +8,8 @@
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate:assets": "tsx scripts/generate-assets.ts"
+    "generate:assets": "tsx scripts/generate-assets.ts",
+    "generate:mark": "tsx scripts/make-mark.ts"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.3.7",

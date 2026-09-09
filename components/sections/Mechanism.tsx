@@ -142,7 +142,7 @@ export function Mechanism({ snapshot }: { snapshot: Snapshot }) {
         </div>
 
         <Reveal>
-          <div className="mt-20 max-w-[68ch] max-md:mt-14">
+          <div id="invariant" className="mt-20 max-w-[68ch] scroll-mt-[86px] max-md:mt-14">
             <h3 className="text-[22px] font-semibold tracking-[-0.01em]">
               {mechanism.invariantHeading}
             </h3>

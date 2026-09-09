@@ -13,16 +13,15 @@ export const copy = {
         label: 'How it works',
         href: '#mechanism',
         children: [
-          { label: 'Canonical valuation', href: '#mechanism' },
+          { label: 'Canonical valuation', href: '#matrix' },
           { label: 'Liquidation shield', href: '#mechanism' },
-          { label: 'Continuity invariant', href: '#mechanism' },
+          { label: 'Continuity invariant', href: '#invariant' },
         ],
       },
       { label: 'Live data', href: '/board' },
       { label: 'Trust model', href: '#limits' },
       {
         label: 'Resources',
-        href: '#',
         children: [
           { label: 'Documentation', href: '/docs' },
           { label: 'ERC-8056', href: 'https://eips.ethereum.org/EIPS/eip-8056', external: true },
@@ -31,7 +30,6 @@ export const copy = {
         ],
       },
     ],
-    secondary: { label: 'Documentation', href: '/docs' },
     primary: { label: 'Get in touch', href: `mailto:${contactEmail}` },
   },
 

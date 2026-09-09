@@ -25,6 +25,14 @@ export default async function BoardPage() {
           it. The adapter is not deployed yet — this page runs the same rules off-chain against
           live data.
         </p>
+        <p className="mt-6">
+          <Link
+            href="/app"
+            className="text-[15px] text-white underline decoration-white/25 underline-offset-4 hover:decoration-white"
+          >
+            {copy.app.entry.fromBoard}
+          </Link>
+        </p>
 
         <div className="mt-14">
           <BoardTable initial={snapshot} />

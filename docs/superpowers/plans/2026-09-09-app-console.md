@@ -2618,7 +2618,7 @@ export default async function CalculatorPage({
 cd /c/Users/chaiz/Desktop/ca-firewall && npx tsc --noEmit && npm test && npm run build
 ```
 
-Then `npm run dev` and check `/app/calculator?asset=CRWD`: CRWD is preselected, its multiplier is 4.0, so the double-counted column reads four times the correct one and the unadjusted column a quarter of it. Typing letters into the amount field must not crash the page. On an asset whose multiplier is 1.0, all three agree and the explanatory line appears.
+Then `npm run dev` and check the calculator. Note against live data: CRWD is NOT a covered asset — it has no on-chain feed, which is exactly the landing page argument — so `?asset=CRWD` must say so rather than silently swap in another ticker. Use `?asset=SGOV` for a real non-unit multiplier (~1.0051 today; only six of the 35 differ from 1.0 at all, and all are small dividend adjustments). Typing letters into the amount field must not crash the page. On an asset whose multiplier is exactly 1.0, all three columns agree and the explanatory line appears.
 
 - [ ] **Step 4: Commit**
 

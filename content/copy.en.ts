@@ -87,6 +87,7 @@ export const copy = {
       before: 'oracle: 0x4A1166a659A55625345e9515b32adECea5547C38 // Chainlink RHTSLA/USD',
       after: 'oracle: 0x0000000000000000000000000000000000000000 // adapter — not yet deployed',
       note: 'Adapter contracts are not deployed yet. This page ships before them, and the address above is a placeholder until testnet.',
+      consoleCta: 'Open the console',
     },
     limits: {
       heading: 'What this does not do',
@@ -192,6 +193,8 @@ export const copy = {
       doubleCountedVerdict: 'Multiplier applied twice',
       unadjustedVerdict: 'Multiplier never applied',
       error: 'Error against the correct valuation',
+      unknownAsset:
+        'has no on-chain price feed on this chain, so it cannot be valued here. Showing a covered asset instead.',
       exact:
         'Both wrong conventions agree with the correct one while the multiplier is 1.0. They diverge the moment a corporate action lands.',
     },

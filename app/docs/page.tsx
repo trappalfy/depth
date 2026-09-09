@@ -13,11 +13,6 @@ const INTERFACE = `interface IStockOracleAdapter is AggregatorV3Interface {
   function feed()  external view returns (address);
 }`
 
-const GATE = `require(
-  IStockOracleAdapter(oracle).status() == IStockOracleAdapter.Status.NORMAL,
-  "market not in normal state"
-);`
-
 export default function DocsPage() {
   return (
     <main className="min-h-screen bg-ink-800 py-24">
@@ -36,6 +31,14 @@ export default function DocsPage() {
             <p className="mt-3 text-[15px] text-fg-muted">
               The adapter contracts are not deployed. This page documents the interface they will
               expose; the live board already runs the classification rules against mainnet data.
+            </p>
+            <p className="mt-4">
+              <Link
+                href="/app"
+                className="text-[15px] text-white underline decoration-white/25 underline-offset-4 hover:decoration-white"
+              >
+                {copy.app.entry.fromDocs}
+              </Link>
             </p>
           </section>
 
@@ -70,7 +73,7 @@ export default function DocsPage() {
               a held price does, and it is three lines.
             </p>
             <pre className="mt-4 overflow-x-auto rounded-[14px] border border-[var(--color-glass-border)] bg-ink-700 p-6 font-mono text-[13px] leading-relaxed">
-              <code>{GATE}</code>
+              <code>{copy.app.snippet.gateCode}</code>
             </pre>
           </section>
 

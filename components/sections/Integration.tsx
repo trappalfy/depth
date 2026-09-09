@@ -1,4 +1,5 @@
 import { copy } from '@/content/copy.en'
+import { Button } from '@/components/ui/Button'
 import { Reveal } from '@/components/ui/Reveal'
 
 export function Integration() {
@@ -25,6 +26,12 @@ export function Integration() {
             </code>
           </pre>
           <p className="mt-4 text-[12px] text-fg-faint">{copy.sections.integration.note}</p>
+
+          <div className="mt-10">
+            <Button href="/app" variant="secondary" className="h-[38px] px-4 text-[15px]">
+              {copy.sections.integration.consoleCta}
+            </Button>
+          </div>
         </Reveal>
       </div>
     </section>

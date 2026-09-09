@@ -24,7 +24,11 @@ export function Calculator({
   initialSymbol?: string
 }) {
   const rows = snapshot.rows
-  const preselected = rows.find((r) => r.symbol === initialSymbol?.toUpperCase())
+  const requested = initialSymbol?.toUpperCase()
+  const preselected = rows.find((r) => r.symbol === requested)
+  // Only the 35 tokens with an on-chain feed can be valued. Asking for one of
+  // the others must say so rather than silently swap in a different asset.
+  const requestedIsUncovered = Boolean(requested) && preselected === undefined
   const [symbol, setSymbol] = useState(preselected?.symbol ?? rows[0]?.symbol ?? '')
   const [amount, setAmount] = useState('100')
   const [convention, setConvention] = useState<Convention>('doubleCounted')
@@ -79,6 +83,12 @@ export function Calculator({
         {copy.app.calculator.heading}
       </h1>
       <p className="mt-6 max-w-[68ch] text-[17px] text-fg-muted">{copy.app.calculator.lede}</p>
+
+      {requestedIsUncovered && (
+        <p className="mt-4 max-w-[68ch] text-[15px] text-fg-muted">
+          <span className="font-mono">{requested}</span> {copy.app.calculator.unknownAsset}
+        </p>
+      )}
 
       <div className="mt-12 grid gap-6 md:grid-cols-3">
         <label className="block">

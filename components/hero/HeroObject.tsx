@@ -203,7 +203,7 @@ export function HeroObject() {
     <canvas
       ref={ref}
       aria-hidden
-      className="pointer-events-none absolute left-1/2 h-[62%] w-[73%] -translate-x-1/2"
+      className="pointer-events-none absolute left-1/2 h-[62%] w-[73%] -translate-x-1/2 max-md:w-[118%]"
       style={{ top: '52%' }}
     />
   )

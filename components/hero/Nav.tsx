@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { copy } from '@/content/copy.en'
 import { Button } from '@/components/ui/Button'
+import { MobileMenu } from '@/components/hero/MobileMenu'
 
 export function Nav() {
   const [open, setOpen] = useState<string | null>(null)
@@ -71,7 +72,9 @@ export function Nav() {
           })}
         </ul>
 
-        <div className="flex items-center gap-2">
+        <MobileMenu />
+
+        <div className="flex items-center gap-2 max-md:hidden">
           <Button
             href={copy.nav.secondary.href}
             variant="secondary"

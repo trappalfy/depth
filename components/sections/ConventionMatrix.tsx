@@ -1,46 +1,82 @@
-import { copy } from '@/content/copy.en'
 import { Reveal } from '@/components/ui/Reveal'
+import { copy } from '@/content/copy.en'
+
+const { matrix } = copy.sections
+
+/** The four cells, addressed by their two axes rather than listed flat. */
+function cellFor(balance: string, price: string) {
+  return matrix.rows.find((row) => row.balance === balance && row.price === price)
+}
 
 export function ConventionMatrix() {
   return (
-    <section className="bg-ink-800 py-[160px] max-md:py-16">
+    <section id="matrix" className="scroll-mt-[86px] bg-ink-800 py-[160px] max-md:py-16">
       <div className="mx-auto max-w-[1132px] px-6">
         <Reveal>
           <h2 className="max-w-[16ch] text-[40px] font-semibold leading-[1.1] tracking-[-0.02em] max-md:text-[28px]">
-            {copy.sections.matrix.heading}
+            {matrix.heading}
           </h2>
-          <p className="mt-6 max-w-[68ch] text-[17px] text-fg-muted">{copy.sections.matrix.lede}</p>
+          <p className="mt-6 max-w-[68ch] text-[17px] text-fg-muted">{matrix.lede}</p>
         </Reveal>
 
+        {/* A real 2x2. The heading promises two axes; a flat list of four rows
+            hides the fact that the correct answers lie on the diagonal. */}
         <div className="mt-14 overflow-x-auto">
-          <table className="w-full min-w-[720px] border-collapse text-left">
-            <thead>
-              <tr className="text-[12px] text-fg-faint">
-                <th className="pb-3 font-normal">Balance</th>
-                <th className="pb-3 font-normal">Price</th>
-                <th className="pb-3 font-normal">Result</th>
-                <th className="pb-3 font-normal">Why</th>
-              </tr>
-            </thead>
-            <tbody>
-              {copy.sections.matrix.rows.map((row) => (
-                <tr key={`${row.balance}-${row.price}`} className="border-t border-white/[0.06]">
-                  <td className="py-4 font-mono text-[13px] text-white">{row.balance}</td>
-                  <td className="py-4 text-[15px] text-fg-muted">{row.price}</td>
-                  <td
-                    className="py-4 text-[15px] font-semibold"
-                    style={{
-                      color: row.verdict === 'correct' ? 'var(--color-up)' : 'var(--color-down)',
-                    }}
-                  >
-                    {row.verdict === 'correct' ? 'Correct' : 'Wrong'}
-                  </td>
-                  <td className="py-4 text-[15px] text-fg-muted">{row.note}</td>
-                </tr>
+          <div className="min-w-[720px]">
+            <div className="grid grid-cols-[200px_1fr_1fr] gap-4">
+              <div />
+              {matrix.prices.map((price) => (
+                <div key={price} className="px-1">
+                  <p className="text-[12px] text-fg-faint">{matrix.priceAxis}</p>
+                  <p className="mt-1 font-mono text-[13px] text-white">{price}</p>
+                </div>
               ))}
-            </tbody>
-          </table>
+
+              {matrix.balances.map((balance) => (
+                <div key={balance} className="contents">
+                  <div className="flex items-center px-1">
+                    <div>
+                      <p className="text-[12px] text-fg-faint">{matrix.balanceAxis}</p>
+                      <p className="mt-1 font-mono text-[13px] text-white">{balance}</p>
+                    </div>
+                  </div>
+
+                  {matrix.prices.map((price) => {
+                    const cell = cellFor(balance, price)
+                    if (!cell) return <div key={price} />
+                    const correct = cell.verdict === 'correct'
+                    return (
+                      <div
+                        key={price}
+                        className="rounded-[14px] border border-[var(--color-glass-border)] bg-ink-700 p-6"
+                      >
+                        <div className="flex items-baseline justify-between gap-4">
+                          <p
+                            className="text-[17px] font-semibold"
+                            style={{ color: correct ? 'var(--color-up)' : 'var(--color-down)' }}
+                          >
+                            {correct ? 'Correct' : 'Wrong'}
+                          </p>
+                          <p
+                            className="font-mono text-[13px] tabular-nums"
+                            style={{
+                              color: correct ? 'var(--color-fg-faint)' : 'var(--color-down)',
+                            }}
+                          >
+                            {cell.factor}
+                          </p>
+                        </div>
+                        <p className="mt-3 text-[15px] text-fg-muted">{cell.note}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+
+        <p className="mt-8 max-w-[68ch] text-[15px] text-fg-muted">{matrix.diagonalNote}</p>
       </div>
     </section>
   )

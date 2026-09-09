@@ -67,24 +67,42 @@ export const copy = {
     matrix: {
       heading: 'Two right answers and two wrong ones',
       lede: 'The naive integration is accidentally correct. The careful one, which reads the multiplier and applies it, is the one that breaks.',
+      // Rendered as an actual 2x2 so the diagonal is visible: the correct
+      // answers are the two consistent pairs, and the heading's claim becomes
+      // something the reader can see rather than count.
+      balanceAxis: 'Balance read as',
+      priceAxis: 'Price read from',
+      balances: ['balanceOf()', 'balanceOfUI()'],
+      prices: ['Chainlink feed', 'REST /prices'],
+      diagonalNote:
+        'The correct answers sit on the diagonal: each applies the multiplier exactly once. Every mixed pair applies it twice or not at all, and neither reverts.',
       rows: [
-        { balance: 'balanceOf()', price: 'Chainlink feed', verdict: 'correct', note: 'The multiplier is applied exactly once, inside the price.' },
-        { balance: 'balanceOfUI()', price: 'Chainlink feed', verdict: 'wrong', note: 'Multiplier applied twice. On a 4:1 split this overvalues collateral fourfold.' },
-        { balance: 'balanceOf()', price: 'REST /prices', verdict: 'wrong', note: 'Multiplier applied zero times. Collateral is undervalued and healthy positions are liquidated.' },
-        { balance: 'balanceOfUI()', price: 'REST /prices', verdict: 'correct', note: 'Both sides use the unadjusted convention.' },
+        { balance: 'balanceOf()', price: 'Chainlink feed', verdict: 'correct', factor: 'x1', note: 'The multiplier is applied exactly once, inside the price.' },
+        { balance: 'balanceOfUI()', price: 'Chainlink feed', verdict: 'wrong', factor: 'x m', note: 'Multiplier applied twice. On a 4:1 split this overvalues collateral fourfold.' },
+        { balance: 'balanceOf()', price: 'REST /prices', verdict: 'wrong', factor: '/ m', note: 'Multiplier applied zero times. Collateral is undervalued and healthy positions are liquidated.' },
+        { balance: 'balanceOfUI()', price: 'REST /prices', verdict: 'correct', factor: 'x1', note: 'Both sides use the unadjusted convention.' },
       ],
     },
     mechanism: {
       heading: 'A fuse between the price and the protocol',
       lede: 'The adapter is an AggregatorV3-compatible contract. It classifies the moment before it answers, and holds the last trustworthy price when the moment is unsafe.',
+      // `status` ties a described state to the off-chain classifier in
+      // lib/status.ts, so the census below can count the live market against
+      // the same vocabulary. null means the state has no off-chain counterpart
+      // and cannot be counted from feed data alone.
       states: [
-        { name: 'Normal', body: 'Feed is fresh, no action staged. The price passes through untouched.' },
-        { name: 'Quiet', body: 'The feed is silent but inside its 24-hour heartbeat. Equities trade 24/5; this chain runs 24/7.' },
-        { name: 'Corporate action', body: 'The oracle is paused or a new multiplier is staged. The pre-window price is held.' },
-        { name: 'Desync', body: 'Price moved by the multiplier ratio, which a split must never do. Protection engages without waiting for the issuer to pause.' },
-        { name: 'Token halted', body: 'Transfers are paused on the token contract itself.' },
-        { name: 'Unsafe', body: 'The protection budget is spent. The adapter reverts rather than answering with a stale number.' },
+        { name: 'Normal', status: 'NORMAL', body: 'Feed is fresh, no action staged. The price passes through untouched.' },
+        { name: 'Quiet', status: 'OFF_HOURS', body: 'The feed is silent but inside its 24-hour heartbeat. Equities trade 24/5; this chain runs 24/7.' },
+        { name: 'Corporate action', status: 'CORPORATE_ACTION', body: 'The oracle is paused or a new multiplier is staged. The pre-window price is held.' },
+        { name: 'Token halted', status: 'TOKEN_HALTED', body: 'Transfers are paused on the token contract itself.' },
+        { name: 'Past heartbeat', status: 'STALE', body: 'The feed has gone longer than its own heartbeat without publishing. Nothing about it can be called fresh.' },
+        { name: 'Desync', status: null, body: 'Price moved by the multiplier ratio, which a split must never do. Protection engages without waiting for the issuer to pause. Detecting it needs the adapter\u2019s own committed snapshot, so it cannot be counted from feed data alone.' },
+        { name: 'Unsafe', status: null, body: 'The protection budget is spent. The adapter reverts rather than answering with a stale number. It is a property of a deployed adapter, not of the market.' },
       ],
+      censusHeading: 'Where the market sits right now',
+      censusLede:
+        'The same rules, run against every covered feed this second. A zero is a finding, not an empty slot: it says no feed is in that state at the moment you are reading.',
+      censusUncountable: 'Needs a deployed adapter',
       invariantHeading: 'Why a held price cannot be abused',
       invariantBody:
         'The held price is the one that stood before the window opened, and it is the same for everyone. A position cannot enter the window healthier than it was. Anyone already underwater stays underwater and stays liquidatable. The window removes the artefact, not the debt.',
@@ -100,11 +118,30 @@ export const copy = {
     limits: {
       heading: 'What this does not do',
       lede: 'Publishing the boundary is part of the product. A protocol that cannot see the edges cannot price the risk.',
+      // Every boundary carries what covers it. A limitation with no answer is
+      // an apology; a limitation with an answer is a scope.
+      coverLabel: 'What covers it',
       items: [
-        { title: 'It does not stop new borrowing against a held price', body: 'An oracle cannot see who is calling it. Liquidation protection needs zero changes; gating new borrows on a normal status is a three-line opt-in.' },
-        { title: 'It does not price the assets with no feed', body: 'Most tokenized assets on this chain have no on-chain price at all. The adapter guards the feeds that exist; it does not invent the ones that do not.' },
-        { title: 'It does not detect a sequencer outage today', body: 'No sequencer uptime feed exists on this chain. The state is built and dormant, and switches on the day one is published.' },
-        { title: 'It cannot tell a closed market from a broken oracle', body: 'Solidity has no calendar. Both cases resolve to the same conservative behaviour, so the ambiguity is safe — silence is never served as a fresh price.' },
+        {
+          title: 'It does not stop new borrowing against a held price',
+          body: 'An oracle cannot see who is calling it. Freezing the price protects a position from a false liquidation, but it does not stop the same borrower taking on more debt at that frozen number.',
+          cover: 'Three lines on your side: gate new borrows on status() == NORMAL. Liquidation protection itself needs no code change at all.',
+        },
+        {
+          title: 'It does not price the assets with no feed',
+          body: 'Most tokenized assets on this chain have no on-chain price whatsoever. The adapter guards the feeds that exist; it does not invent the ones that do not.',
+          cover: 'Nothing, and deliberately so. Inventing a price for an unpriced asset is the failure this product exists to prevent.',
+        },
+        {
+          title: 'It does not detect a sequencer outage today',
+          body: 'No sequencer uptime feed has been published on this chain, so there is nothing for the check to read.',
+          cover: 'The state is built and dormant. The constructor takes an uptime feed address, and a zero disables it — the day Chainlink publishes one, a new deployment switches it on with no change to the logic.',
+        },
+        {
+          title: 'It cannot tell a closed market from a broken oracle',
+          body: 'Solidity has no calendar, and hard-coding an exchange holiday table into an immutable contract guarantees it will one day be wrong.',
+          cover: 'Both cases resolve to the same conservative behaviour, which makes the ambiguity safe: silence is never served as a fresh price, whatever caused it.',
+        },
       ],
     },
     contact: {

@@ -20,7 +20,7 @@ export default async function Page() {
         <Hero snapshot={snapshot} />
         <Problem snapshot={snapshot} />
         <ConventionMatrix />
-        <Mechanism />
+        <Mechanism snapshot={snapshot} />
         <MotifBand />
         <Integration />
         <Limits />

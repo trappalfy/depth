@@ -1,7 +1,10 @@
+// INTERIM — replace with the real address before deploying (Task 12). It is
+// load-bearing: the navbar's only button, the footer and /docs all mail here.
+const contactEmail = 'hello@example.com'
+
 export const copy = {
   brand: 'Depth',
-  // INTERIM — replace with the real address before deploying (Task 12).
-  contactEmail: 'hello@example.com',
+  contactEmail,
 
   nav: {
     items: [
@@ -29,7 +32,7 @@ export const copy = {
       },
     ],
     secondary: { label: 'Documentation', href: '/docs' },
-    primary: { label: 'Get in touch', href: '#contact' },
+    primary: { label: 'Get in touch', href: `mailto:${contactEmail}` },
   },
 
   hero: {
@@ -140,8 +143,8 @@ export const copy = {
       heading: 'One address',
       lede: 'No code changes, no second audit. Point the oracle at the adapter and the protection is live.',
       before: 'oracle: 0x4A1166a659A55625345e9515b32adECea5547C38 // Chainlink RHTSLA/USD',
-      after: 'oracle: 0x0000000000000000000000000000000000000000 // adapter — not yet deployed',
-      note: 'Adapter contracts are not deployed yet. This page ships before them, and the address above is a placeholder until testnet.',
+      after: 'oracle: 0x0000000000000000000000000000000000000000 // Depth adapter — RHTSLA/USD',
+      note: 'The adapter address is issued by the factory the moment you deploy one, and it is deterministic in the token and the feed. The zero above stands in until the factory is on chain.',
       consoleCta: 'Open the console',
     },
     limits: {
@@ -173,12 +176,6 @@ export const copy = {
           cover: 'Both cases resolve to the same conservative behaviour, which makes the ambiguity safe: silence is never served as a fresh price, whatever caused it.',
         },
       ],
-    },
-    contact: {
-      heading: 'Talk to us before you need this',
-      lede: 'Depth ships before the failure it prevents. If you run a lending market on tokenized equities, the useful conversation is now — while the interface can still change to fit how you read an oracle.',
-      cta: 'Email us',
-      secondary: 'Open the console',
     },
   },
   app: {

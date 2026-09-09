@@ -5,7 +5,7 @@ import { WalletProvider } from '@/components/wallet/WalletProvider'
 export const metadata: Metadata = {
   // A default plus its own template: without the template, the pages nested
   // under this layout lose the suffix and a tab reads just 'Calculator'.
-  title: { default: 'Console', template: '%s · Depth' },
+  title: { default: 'Console', template: '%s – Depth' },
 }
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

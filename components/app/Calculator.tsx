@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import { parseUnits } from 'viem'
 import { copy } from '@/content/copy.en'
 import { formatPrice } from '@/lib/format'
-import type { Snapshot } from '@/lib/snapshot'
+import type { FeedRow } from '@/lib/snapshot'
 import { valuate, valuationError, type Convention } from '@/lib/valuation'
 
 const TOKEN_DECIMALS = 18
@@ -16,18 +16,27 @@ function usd(value: bigint): string {
   return `${negative ? '-' : ''}$${text}`
 }
 
+/**
+ * The interactive core only — no heading and no source note, so the adapter page
+ * and the standalone page can each frame it their own way while the maths lives
+ * in one file.
+ *
+ * `locked` is for the adapter page, where the asset is already decided by the
+ * route: the selector would be a way to wander off the adapter you opened.
+ */
 export function Calculator({
-  snapshot,
+  rows,
   initialSymbol,
+  locked = false,
 }: {
-  snapshot: Snapshot
+  rows: readonly FeedRow[]
   initialSymbol?: string
+  locked?: boolean
 }) {
-  const rows = snapshot.rows
   const requested = initialSymbol?.toUpperCase()
   const preselected = rows.find((r) => r.symbol === requested)
-  // Only the 35 tokens with an on-chain feed can be valued. Asking for one of
-  // the others must say so rather than silently swap in a different asset.
+  // Only the tokens with an on-chain feed can be valued. Asking for one of the
+  // others must say so rather than silently swap in a different asset.
   const requestedIsUncovered = Boolean(requested) && preselected === undefined
   const [symbol, setSymbol] = useState(preselected?.symbol ?? rows[0]?.symbol ?? '')
   const [amount, setAmount] = useState('100')
@@ -79,28 +88,25 @@ export function Calculator({
 
   return (
     <div>
-      <h1 className="text-[40px] font-semibold leading-[1.1] tracking-[-0.02em] max-md:text-[28px]">
-        {copy.app.calculator.heading}
-      </h1>
-      <p className="mt-6 max-w-[68ch] text-[17px] text-fg-muted">{copy.app.calculator.lede}</p>
-
       {requestedIsUncovered && (
-        <p className="mt-4 max-w-[68ch] text-[15px] text-fg-muted">
+        <p className="mb-8 max-w-[68ch] text-[15px] text-fg-muted">
           <span className="font-mono">{requested}</span> {copy.app.calculator.unknownAsset}
         </p>
       )}
 
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
-        <label className="block">
-          <span className="text-[12px] text-fg-faint">{copy.app.calculator.asset}</span>
-          <select value={symbol} onChange={(e) => setSymbol(e.target.value)} className={field}>
-            {rows.map((r) => (
-              <option key={r.symbol} value={r.symbol} className="bg-ink-700">
-                {r.symbol} — {r.name}
-              </option>
-            ))}
-          </select>
-        </label>
+      <div className={`grid gap-6 ${locked ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
+        {!locked && (
+          <label className="block">
+            <span className="text-[12px] text-fg-faint">{copy.app.calculator.asset}</span>
+            <select value={symbol} onChange={(e) => setSymbol(e.target.value)} className={field}>
+              {rows.map((r) => (
+                <option key={r.symbol} value={r.symbol} className="bg-ink-700">
+                  {r.symbol} — {r.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
 
         <label className="block">
           <span className="text-[12px] text-fg-faint">{copy.app.calculator.amount}</span>
@@ -162,8 +168,6 @@ export function Calculator({
           </div>
         </>
       )}
-
-      <p className="mt-10 text-[12px] text-fg-faint">{copy.footer.sourceNote}</p>
     </div>
   )
 }

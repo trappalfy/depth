@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
+import { Calculator } from '@/components/app/Calculator'
 import { CommitButton } from '@/components/app/CommitButton'
 import { IntegrationSnippet } from '@/components/app/IntegrationSnippet'
 import { NotDeployedNotice } from '@/components/app/NotDeployedNotice'
@@ -163,17 +164,22 @@ export function AdapterDetail({ row, observedAt }: { row: FeedRow; observedAt: n
       </div>
 
       <div className="mt-16">
-        <IntegrationSnippet feed={row.feed} adapter={adapter} />
+        <h2 className="text-[22px] font-semibold tracking-[-0.01em]">
+          {copy.app.detail.calculatorHeading}
+        </h2>
+        <p className="mt-3 max-w-[68ch] text-[15px] text-fg-muted">
+          {copy.app.detail.calculatorLede}
+        </p>
+        <div className="mt-8">
+          {/* The route already decided the asset, so the selector is locked:
+              wandering to another ticker here would leave the adapter open. */}
+          <Calculator rows={[row]} initialSymbol={row.symbol} locked />
+        </div>
       </div>
 
-      <p className="mt-10">
-        <Link
-          href={`/app/calculator?asset=${row.symbol}`}
-          className="text-[15px] text-white underline decoration-white/25 underline-offset-4 hover:decoration-white"
-        >
-          {copy.app.detail.calculatorLink}
-        </Link>
-      </p>
+      <div className="mt-16">
+        <IntegrationSnippet feed={row.feed} adapter={adapter} />
+      </div>
     </div>
   )
 }

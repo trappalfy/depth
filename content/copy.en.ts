@@ -184,7 +184,9 @@ export const copy = {
         'Permissionless and grants nothing. The continuity invariant compares the current round against this snapshot, so its freshness is what the check depends on.',
       committedAt: 'Snapshot age',
       unavailable: 'Not available until the adapter is deployed',
-      calculatorLink: 'Open this asset in the calculator',
+      calculatorHeading: 'What this adapter is worth to you',
+      calculatorLede:
+        'The same position, valued three ways against this feed at the price above. Two of the three are wrong, and neither of them reverts — which is why the mistake survives an audit.',
     },
     calculator: {
       heading: 'What a convention mistake costs',

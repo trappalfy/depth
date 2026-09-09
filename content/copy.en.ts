@@ -41,10 +41,11 @@ export const copy = {
     cta: { label: 'See live data', href: '/board' },
     cardA: {
       label: 'Already happened',
-      statement: ['CRWD split 4:1 with no', 'on-chain price feed'],
+      statement: ['CRWD split 4:1 —', 'no on-chain feed'],
     },
     cardB: {
       label: 'TSLA price age · Chainlink',
+      arrowLabel: 'See every feed on the live board',
     },
   },
   sections: {

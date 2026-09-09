@@ -47,3 +47,20 @@ html, body {
     transition-duration: 0.01ms !important;
   }
 }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.anim-nav   { animation: fade 400ms both; }
+.anim-h1    { animation: rise 600ms cubic-bezier(.22,1,.36,1) 80ms both; }
+.anim-sub   { animation: rise 500ms cubic-bezier(.22,1,.36,1) 200ms both; }
+.anim-cta   { animation: rise 500ms cubic-bezier(.22,1,.36,1) 280ms both; }
+.anim-obj   { animation: fade 900ms 400ms both; }
+.anim-card1 { animation: rise 500ms 520ms both; }
+.anim-card2 { animation: rise 500ms 620ms both; }

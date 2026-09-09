@@ -1,11 +1,14 @@
-import { Backdrop } from '@/components/hero/Backdrop'
-import { HeroObject } from '@/components/hero/HeroObject'
+import { Hero } from '@/components/hero/Hero'
+import { readSnapshot } from '@/lib/snapshot'
 
-export default function Page() {
+export const revalidate = 30
+
+export default async function Page() {
+  const snapshot = await readSnapshot()
+
   return (
-    <main className="relative h-[100svh] w-full overflow-hidden">
-      <Backdrop />
-      <HeroObject />
+    <main>
+      <Hero snapshot={snapshot} />
     </main>
   )
 }

@@ -1,11 +1,14 @@
 'use client'
 
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useConnect, useConnectors } from 'wagmi'
+import { useMounted } from '@/components/wallet/useMounted'
 import { copy } from '@/content/copy.en'
 import { pickWallets } from '@/lib/connectors'
 
 export function ConnectModal({ onClose }: { onClose: () => void }) {
+  const mounted = useMounted()
   const connect = useConnect()
   const connectors = useConnectors()
   const wallets = pickWallets(connectors)
@@ -15,10 +18,21 @@ export function ConnectModal({ onClose }: { onClose: () => void }) {
       if (e.key === 'Escape') onClose()
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+
+    // Hold the page still underneath, so dismissing the dialog returns the
+    // reader to where they were rather than somewhere they scrolled to.
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = previousOverflow
+    }
   }, [onClose])
 
-  return (
+  if (!mounted) return null
+
+  const dialog = (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6"
       onClick={onClose}
@@ -28,7 +42,7 @@ export function ConnectModal({ onClose }: { onClose: () => void }) {
         aria-modal="true"
         aria-label={copy.app.wallet.modalTitle}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[380px] rounded-[14px] border border-[var(--color-glass-border)] bg-ink-700 p-6 shadow-[0_24px_60px_rgba(0,0,0,.55)]"
+        className="max-h-[calc(100dvh-3rem)] w-full max-w-[380px] overflow-y-auto rounded-[14px] border border-[var(--color-glass-border)] bg-ink-700 p-6 shadow-[0_24px_60px_rgba(0,0,0,.55)]"
       >
         <div className="flex items-start justify-between">
           <h2 className="text-[17px] font-semibold">{copy.app.wallet.modalTitle}</h2>
@@ -87,4 +101,10 @@ export function ConnectModal({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   )
+
+  // Rendered into <body>, not in place. The console navbar carries
+  // `backdrop-blur`, and a backdrop-filter makes its element the containing
+  // block for fixed-position descendants — which pinned this dialog inside the
+  // 64px header instead of the viewport, pushing it off screen.
+  return createPortal(dialog, document.body)
 }

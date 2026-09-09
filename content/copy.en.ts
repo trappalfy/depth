@@ -211,6 +211,29 @@ export const copy = {
       done: 'Done',
       failed: 'Transaction failed.',
     },
+    deploy: {
+      title: 'Deploy adapter',
+      lede: 'Deploying is permissionless and takes two arguments: the token and the feed. There is nothing to configure — the parameters below are fixed in the factory, and the address is fixed by the pair.',
+      wrapsHeading: 'What this adapter wraps',
+      token: 'Token',
+      feed: 'Chainlink feed',
+      address: 'Adapter address',
+      addressPending: 'derived by the factory at deploy',
+      paramsHeading: 'Baked into the adapter, read from the factory',
+      paramsHeadingIntended: 'Baked into the adapter — the arguments it will be deployed with',
+      answerHeading: 'What it would answer the moment it exists',
+      answerPassthrough: 'passed through from the feed, nothing held',
+      answerHeld: 'a held price — only the deployed adapter has it',
+      acknowledge:
+        'I understand the adapter is immutable and ownerless. Paying the gas gives me no rights over it, anyone may deploy the same pair, and the address is the same whoever sends the transaction.',
+      mustAcknowledge: 'Confirm you understand what deploying means.',
+      confirm: 'Deploy adapter',
+      cancel: 'Cancel',
+      copy: 'Copy',
+      copied: 'Copied',
+      gasNote:
+        'One transaction, no approval and no value attached. Gas is paid in the chain’s native token.',
+    },
     preview: {
       badge: 'Preview — no contract deployed',
       explain:

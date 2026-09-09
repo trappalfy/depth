@@ -161,7 +161,7 @@ export function AdapterList({ initial }: { initial: Snapshot }) {
                         {copy.app.list.openDetail}
                       </Link>
                     ) : (
-                      <DeployButton token={row.token} feed={row.feed} />
+                      <DeployButton row={row} />
                     )}
                   </td>
                 </tr>

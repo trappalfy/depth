@@ -6,6 +6,7 @@ import type { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { Calculator } from '@/components/app/Calculator'
 import { CommitButton } from '@/components/app/CommitButton'
+import { DeployButton } from '@/components/app/DeployButton'
 import { IntegrationSnippet } from '@/components/app/IntegrationSnippet'
 import { PreviewBadge } from '@/components/app/PreviewTag'
 import { StatNumber, StatUnavailable } from '@/components/app/PriceNumbers'
@@ -140,7 +141,7 @@ export function AdapterDetail({ row, observedAt }: { row: FeedRow; observedAt: n
         {held !== null ? (
           <StatNumber
             label={copy.app.detail.heldPrice}
-            value={`${formatPrice(held, row.priceDecimals)}`}
+            value={`$${formatPrice(held, row.priceDecimals)}`}
             delta={delta ?? undefined}
             note={copy.app.detail.heldPriceNote}
           />
@@ -192,6 +193,14 @@ export function AdapterDetail({ row, observedAt }: { row: FeedRow; observedAt: n
             ? `${copy.app.detail.committedAt}: ${formatAge(Math.max(0, now - committedAt))}`
             : copy.app.detail.noSnapshot}
         </p>
+        {/* Deploy belongs here too: this page is where somebody decides they
+            want this adapter, and sending them back to the table to press the
+            same button would read as a missing control. */}
+        {adapter === null && (
+          <div className="mb-6">
+            <DeployButton row={row} />
+          </div>
+        )}
         <CommitButton adapter={adapter} />
       </div>
 

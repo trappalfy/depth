@@ -26,6 +26,7 @@ export function TxButton({
   variant = 'secondary',
   className = '',
   onSuccess,
+  showReason = true,
 }: {
   label: string
   /** null when there is nothing to send yet — always paired with a reason. */
@@ -34,6 +35,12 @@ export function TxButton({
   variant?: 'primary' | 'secondary'
   className?: string
   onSuccess?: () => void
+  /**
+   * Whether the reason is printed under the button. Down a table column it is
+   * the same sentence on every row, and thirty-five copies of it read as
+   * breakage; there the tooltip carries it instead.
+   */
+  showReason?: boolean
 }) {
   const write = useWriteContract()
   const receipt = useWaitForTransactionReceipt({
@@ -88,7 +95,9 @@ export function TxButton({
         {text}
       </ActionButton>
 
-      {blockedReason && <p className="mt-2 text-[12px] text-fg-faint">{blockedReason}</p>}
+      {blockedReason && showReason && (
+        <p className="mt-2 text-[12px] text-fg-faint">{blockedReason}</p>
+      )}
       {failure && <p className="mt-2 text-[12px] text-fg-muted">{failure}</p>}
     </div>
   )

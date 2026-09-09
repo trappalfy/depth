@@ -211,9 +211,11 @@ export const copy = {
       done: 'Done',
       failed: 'Transaction failed.',
     },
-    notDeployed: {
-      heading: 'The adapter contracts are not on chain yet',
-      body: 'Every control on this page is written against the final interface. When AdapterFactory is deployed, one address in lib/deployments.ts changes and these controls come alive. Until then the market data is live and the adapter columns read as unavailable rather than as zero.',
+    preview: {
+      badge: 'Preview — no contract deployed',
+      explain:
+        'Every control is written against the final interface. Values marked "preview" are computed from the live feed by the adapter\u2019s own rules rather than read from a contract; when AdapterFactory is deployed, one address in lib/deployments.ts changes and the same screens read from chain instead.',
+      mark: 'preview',
     },
     list: {
       heading: 'Adapters',
@@ -227,6 +229,8 @@ export const copy = {
       deploy: 'Deploy',
       deployed: 'Deployed',
       factoryLabel: 'Factory',
+      factoryPending: 'issued at deploy',
+      paramsIntended: 'the arguments it will be deployed with',
       paramQuiet: 'quiet after',
       paramBudget: 'protection budget',
       paramContinuity: 'continuity tolerance',
@@ -243,6 +247,21 @@ export const copy = {
       heldPriceNote: 'What the adapter would serve inside a protection window.',
       budget: 'Protection budget remaining',
       budgetNote: 'When this reaches zero the adapter reverts rather than keep holding.',
+      budgetPreviewNote:
+        'Full: the budget is only spent while a price is held, and no protection window is open on this feed.',
+      budgetUnknown:
+        'A protection window is open on this feed. The budget runs from the moment it opened, which only the adapter records.',
+      answerLabel: 'What the adapter would answer',
+      passthroughNote:
+        'Nothing is held in this state: the adapter passes the feed\u2019s own number through, so this is the price it would return right now.',
+      heldUnknown:
+        'The held price is the one committed before this window opened. Only the adapter has it, and no adapter is deployed.',
+      previewStatusNote:
+        'Computed off chain by the adapter\u2019s own rules against the live feed, not read from a contract.',
+      unmappedStatus:
+        'This feed is past its heartbeat, and the on-chain enum has no member for that yet. Which state covers it is decided with the contract, so nothing is claimed here.',
+      adapterPending: 'adapter address issued by the factory at deploy',
+      noSnapshot: 'No snapshot committed yet. The first one is written when the adapter is deployed.',
       multiplier: 'uiMultiplier',
       stagedMultiplier: 'Staged multiplier',
       multiplierNote: 'A difference between these two is a corporate action in progress.',

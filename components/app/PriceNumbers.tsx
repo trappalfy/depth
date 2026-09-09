@@ -1,3 +1,5 @@
+import { PreviewMark } from '@/components/app/PreviewTag'
+
 /**
  * Brief §11.3: label 12px, value 33px, then a bar or a delta.
  * `delta` is the only place colour is allowed outside the hero object, and only
@@ -10,6 +12,7 @@ export function StatNumber({
   fraction,
   delta,
   note,
+  preview = false,
 }: {
   label: string
   value: string
@@ -19,11 +22,16 @@ export function StatNumber({
   /** Signed, already formatted, e.g. "+3.42%" — the sign drives the colour. */
   delta?: string
   note?: string
+  /** The number was computed from live feed data, not read from a contract. */
+  preview?: boolean
 }) {
   const rising = delta?.startsWith('+')
   return (
     <div className="rounded-[14px] border border-[var(--color-glass-border)] bg-ink-700 p-6">
-      <p className="text-[12px] text-fg-faint">{label}</p>
+      <div className="flex items-center gap-2">
+        <p className="text-[12px] text-fg-faint">{label}</p>
+        {preview && <PreviewMark />}
+      </div>
       <p className="mt-2 font-mono text-[33px] leading-none tabular-nums">{value}</p>
 
       {typeof fraction === 'number' && (

@@ -24,7 +24,7 @@ export function ActionButton({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className={`${buttonBase} ${buttonVariants[variant]} disabled:cursor-not-allowed disabled:opacity-40 ${className}`}
+      className={`${buttonBase} ${buttonVariants[variant]} disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
     >
       {children}
     </button>

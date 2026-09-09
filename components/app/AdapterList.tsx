@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react'
 import type { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { DeployButton } from '@/components/app/DeployButton'
-import { NotDeployedNotice } from '@/components/app/NotDeployedNotice'
+import { PreviewBadge } from '@/components/app/PreviewTag'
 import { StatusPill } from '@/components/ui/StatusPill'
 import { useDeployment } from '@/components/wallet/useDeployment'
 import { copy } from '@/content/copy.en'
 import { adapterFactoryAbi } from '@/lib/adapterAbi'
+import { ADAPTER_PARAMS } from '@/lib/adapterParams'
 import { formatAge, shortAddress } from '@/lib/format'
 import type { Snapshot } from '@/lib/snapshot'
 
@@ -50,6 +51,9 @@ export function AdapterList({ initial }: { initial: Snapshot }) {
     query: { enabled: Boolean(factory) },
   })
 
+  // The factory's own values whenever it can be asked; ours only until then.
+  const shownParams = state.kind === 'live' && params ? params : ADAPTER_PARAMS
+
   const adapterAt = (index: number): { address: Address; deployed: boolean } | null => {
     const results = adapters.data
     if (!results) return null
@@ -62,31 +66,35 @@ export function AdapterList({ initial }: { initial: Snapshot }) {
 
   return (
     <div>
-      <h1 className="text-[40px] font-semibold leading-[1.1] tracking-[-0.02em] max-md:text-[28px]">
-        {copy.app.list.heading}
-      </h1>
+      <div className="flex flex-wrap items-center gap-4">
+        <h1 className="text-[40px] font-semibold leading-[1.1] tracking-[-0.02em] max-md:text-[28px]">
+          {copy.app.list.heading}
+        </h1>
+        {state.kind !== 'live' && <PreviewBadge />}
+      </div>
       <p className="mt-6 max-w-[68ch] text-[17px] text-fg-muted">{copy.app.list.lede}</p>
 
-      {state.kind !== 'live' && (
-        <div className="mt-10">
-          <NotDeployedNotice />
-        </div>
-      )}
-
-      {/* The factory IS the canonical parameter set, so the console reads these
-          off chain rather than keeping a second copy that could drift. */}
-      {state.kind === 'live' && params && (
-        <p className="mt-10 text-[12px] text-fg-faint">
-          {copy.app.list.factoryLabel} <span className="font-mono">{state.factory}</span> ·{' '}
-          {copy.app.list.paramQuiet} {formatAge(Number(params.quietAfter))} ·{' '}
-          {copy.app.list.paramBudget} {formatAge(Number(params.protectionBudget))} ·{' '}
-          {copy.app.list.paramContinuity} {params.continuityBps} bps ·{' '}
-          {copy.app.list.paramSequencer}{' '}
-          {params.sequencerFeed === ZERO_ADDRESS
-            ? copy.app.list.sequencerDisabled
-            : shortAddress(params.sequencerFeed)}
-        </p>
-      )}
+      {/* The factory IS the canonical parameter set: once it is live the console
+          reads these off chain rather than keeping a second copy that could
+          drift. Before that it shows the arguments it will be deployed with,
+          labelled as such — the configuration is part of the product, and
+          hiding it until deploy day would hide it from the people judging it. */}
+      <p className="mt-10 text-[12px] text-fg-faint">
+        {copy.app.list.factoryLabel}{' '}
+        {state.kind === 'live' ? (
+          <span className="font-mono">{state.factory}</span>
+        ) : (
+          copy.app.list.factoryPending
+        )}{' '}
+        · {copy.app.list.paramQuiet} {formatAge(Number(shownParams.quietAfter))} ·{' '}
+        {copy.app.list.paramBudget} {formatAge(Number(shownParams.protectionBudget))} ·{' '}
+        {copy.app.list.paramContinuity} {shownParams.continuityBps} bps ·{' '}
+        {copy.app.list.paramSequencer}{' '}
+        {shownParams.sequencerFeed === ZERO_ADDRESS
+          ? copy.app.list.sequencerDisabled
+          : shortAddress(shownParams.sequencerFeed)}
+        {state.kind !== 'live' && ` (${copy.app.list.paramsIntended})`}
+      </p>
 
       <p className="mt-10 text-[12px] text-fg-faint">
         Read from Robinhood Chain mainnet (chain {initial.chainId}) at block{' '}
@@ -133,7 +141,15 @@ export function AdapterList({ initial }: { initial: Snapshot }) {
                         )}
                       </>
                     ) : (
-                      <span className="font-sans">{copy.app.list.addressPending}</span>
+                      // A placeholder shaped like an address, never an address:
+                      // this one is fixed by CREATE2 and cannot be computed
+                      // before the factory exists, and inventing one here is how
+                      // somebody ends up sending funds into nothing.
+                      <span
+                        title={copy.app.list.addressPending}
+                        className="inline-block h-[10px] w-[92px] rounded-[3px] bg-white/[0.07] align-middle"
+                        aria-label={copy.app.list.addressPending}
+                      />
                     )}
                   </td>
                   <td className="py-3">

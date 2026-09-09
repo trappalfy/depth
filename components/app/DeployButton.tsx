@@ -18,6 +18,7 @@ export function DeployButton({ token, feed }: { token: Address; feed: Address })
     <TxButton
       label={copy.app.list.deploy}
       blockedReason={blockedReason}
+      showReason={false}
       request={
         state.kind === 'live'
           ? {

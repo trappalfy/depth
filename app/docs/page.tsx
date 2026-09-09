@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { SiteFooter } from '@/components/layout/SiteFooter'
 import { copy } from '@/content/copy.en'
 
 const INTERFACE = `interface IStockOracleAdapter is AggregatorV3Interface {
@@ -15,6 +16,7 @@ const INTERFACE = `interface IStockOracleAdapter is AggregatorV3Interface {
 
 export default function DocsPage() {
   return (
+    <>
     <main className="min-h-screen bg-ink-800 py-24">
       <div className="mx-auto max-w-[1132px] px-6">
         <Link href="/" className="text-[15px] text-fg-muted hover:text-white">
@@ -91,5 +93,7 @@ export default function DocsPage() {
         </div>
       </div>
     </main>
+      <SiteFooter />
+    </>
   )
 }

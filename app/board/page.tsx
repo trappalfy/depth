@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { BoardTable } from '@/components/board/BoardTable'
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { StalenessChart } from '@/components/sections/StalenessChart'
 import { copy } from '@/content/copy.en'
 import { readSnapshot } from '@/lib/snapshot'
 import { STATUS_NOTE, type Status } from '@/lib/status'
@@ -11,6 +13,7 @@ export default async function BoardPage() {
   const statuses: Status[] = ['NORMAL', 'OFF_HOURS', 'CORPORATE_ACTION', 'TOKEN_HALTED', 'STALE']
 
   return (
+    <>
     <main className="min-h-screen bg-ink-800 py-24">
       <div className="mx-auto max-w-[1132px] px-6">
         <Link href="/" className="text-[15px] text-fg-muted hover:text-white">
@@ -35,6 +38,10 @@ export default async function BoardPage() {
         </p>
 
         <div className="mt-14">
+          <StalenessChart snapshot={snapshot} />
+        </div>
+
+        <div className="mt-16">
           <BoardTable initial={snapshot} />
         </div>
 
@@ -50,8 +57,9 @@ export default async function BoardPage() {
           ))}
         </div>
 
-        <p className="mt-16 text-[12px] text-fg-faint">{copy.footer.sourceNote}</p>
       </div>
     </main>
+      <SiteFooter />
+    </>
   )
 }

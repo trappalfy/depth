@@ -55,6 +55,14 @@ export const copy = {
         { label: 'Covered by an on-chain price feed' },
         { label: 'With no on-chain price at all' },
       ],
+      chartHeading: 'How old the prices are, right now',
+      chartLede:
+        'Every covered feed, sorted by how long it has been silent, against the 24-hour heartbeat it is allowed. A feed near the dashed line is still "fresh" by its own contract and hours behind the market.',
+      chartAlt:
+        'Covered price feeds sorted by age against their 24-hour heartbeat allowance.',
+      chartAxis: 'covered feeds, freshest first',
+      chartCaption:
+        'A cross-section of the feeds at one instant, not a history — this site stores none. Read from Robinhood Chain mainnet',
     },
     matrix: {
       heading: 'Two right answers and two wrong ones',
@@ -229,6 +237,42 @@ export const copy = {
     },
   },
   footer: {
+    columns: [
+      {
+        title: 'Product',
+        links: [
+          { label: 'The problem', href: '/#problem' },
+          { label: 'How it works', href: '/#mechanism' },
+          { label: 'Trust model', href: '/#limits' },
+          { label: 'Integration', href: '/docs' },
+        ],
+      },
+      {
+        title: 'Live',
+        links: [
+          { label: 'Feed status', href: '/board' },
+          { label: 'Console', href: '/app' },
+          { label: 'Calculator', href: '/app/calculator' },
+        ],
+      },
+      {
+        title: 'Reference',
+        links: [
+          { label: 'ERC-8056', href: 'https://eips.ethereum.org/EIPS/eip-8056', external: true },
+          {
+            label: 'Chainlink feeds',
+            href: 'https://docs.chain.link/data-feeds/tokenized-equity-feeds/robinhood',
+            external: true,
+          },
+          {
+            label: 'Robinhood Chain docs',
+            href: 'https://docs.robinhood.com/chain/stock-tokens/',
+            external: true,
+          },
+        ],
+      },
+    ],
+    rights: 'All rights reserved.',
     sourceNote: 'Every figure on this page is read from Robinhood Chain mainnet (chain 4663) at the time shown. Nothing is illustrative.',
   },
 } as const

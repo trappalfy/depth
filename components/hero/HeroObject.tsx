@@ -209,7 +209,18 @@ void main() {
   outColor = c;
 }`
 
-export function HeroObject() {
+/** The hero's own framing. Passing nothing reproduces it exactly. */
+const HERO_CLASS =
+  'pointer-events-none absolute left-1/2 h-[76%] w-[86%] -translate-x-1/2 max-md:w-[124%]'
+const HERO_STYLE: React.CSSProperties = { top: '46%' }
+
+export function HeroObject({
+  className = HERO_CLASS,
+  style = HERO_STYLE,
+}: {
+  className?: string
+  style?: React.CSSProperties
+} = {}) {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -312,6 +323,7 @@ export function HeroObject() {
     const uCompTexel = gl.getUniformLocation(progComposite, 'uTexel')
 
     let raf = 0
+    let visible = true
     const start = performance.now()
 
     const frame = (now: number) => {
@@ -357,14 +369,31 @@ export function HeroObject() {
       gl.clear(gl.COLOR_BUFFER_BIT)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
 
-      if (!reduced) raf = requestAnimationFrame(frame)
+      if (!reduced && visible) raf = requestAnimationFrame(frame)
     }
 
     resize()
     frame(start)
     window.addEventListener('resize', resize)
+
+    // Raymarching a scene nobody is looking at costs the same as one they are.
+    // The loop stops when the canvas leaves the viewport and picks up on return;
+    // the object's phase keeps advancing, which is unobservable while hidden.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const nowVisible = entry.isIntersecting
+        if (nowVisible === visible) return
+        visible = nowVisible
+        if (visible && !reduced) raf = requestAnimationFrame(frame)
+        else cancelAnimationFrame(raf)
+      },
+      { threshold: 0 },
+    )
+    observer.observe(canvas)
+
     return () => {
       cancelAnimationFrame(raf)
+      observer.disconnect()
       window.removeEventListener('resize', resize)
     }
   }, [])
@@ -373,8 +402,8 @@ export function HeroObject() {
     <canvas
       ref={ref}
       aria-hidden
-      className="pointer-events-none absolute left-1/2 h-[76%] w-[86%] -translate-x-1/2 max-md:w-[124%]"
-      style={{ top: '46%' }}
+      className={className}
+      style={style}
     />
   )
 }

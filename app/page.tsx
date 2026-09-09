@@ -1,9 +1,11 @@
 import { Hero } from '@/components/hero/Hero'
+import { SiteFooter } from '@/components/layout/SiteFooter'
 import { Contact } from '@/components/sections/Contact'
 import { ConventionMatrix } from '@/components/sections/ConventionMatrix'
 import { Integration } from '@/components/sections/Integration'
 import { Limits } from '@/components/sections/Limits'
 import { Mechanism } from '@/components/sections/Mechanism'
+import { MotifBand } from '@/components/sections/MotifBand'
 import { Problem } from '@/components/sections/Problem'
 import { readSnapshot } from '@/lib/snapshot'
 
@@ -13,14 +15,18 @@ export default async function Page() {
   const snapshot = await readSnapshot()
 
   return (
-    <main>
-      <Hero snapshot={snapshot} />
-      <Problem snapshot={snapshot} />
-      <ConventionMatrix />
-      <Mechanism />
-      <Integration />
-      <Limits />
-      <Contact />
-    </main>
+    <>
+      <main>
+        <Hero snapshot={snapshot} />
+        <Problem snapshot={snapshot} />
+        <ConventionMatrix />
+        <Mechanism />
+        <MotifBand />
+        <Integration />
+        <Limits />
+        <Contact />
+      </main>
+      <SiteFooter />
+    </>
   )
 }

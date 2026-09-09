@@ -12,8 +12,8 @@ const CALLS_PER_ASSET = 7
 export interface FeedRow {
   symbol: string
   name: string
-  token: string
-  feed: string
+  token: `0x${string}`
+  feed: `0x${string}`
   heartbeat: number
   price: string
   priceDecimals: number

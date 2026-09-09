@@ -10,6 +10,15 @@ export const robinhoodChain = defineChain({
   },
 })
 
+/**
+ * The only chain the console reads from and writes to.
+ *
+ * Testnet 46630 is deliberately absent: `lib/assets.generated.ts` is a mainnet
+ * asset table, so there would be nothing to display there. Stage 3 verifies on
+ * testnet from Foundry, not from this UI.
+ */
+export const ACTIVE_CHAIN_ID = robinhoodChain.id
+
 export const publicClient = createPublicClient({
   chain: robinhoodChain,
   transport: http(process.env.RPC_URL ?? 'https://rpc.mainnet.chain.robinhood.com', {

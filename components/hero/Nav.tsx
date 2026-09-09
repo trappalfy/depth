@@ -31,7 +31,7 @@ export function Nav() {
               >
                 <Link
                   href={item.href}
-                  className="flex items-center gap-1.5 text-[16px] text-fg-muted transition-colors duration-[160ms] hover:text-white"
+                  className="flex items-center gap-1.5 whitespace-nowrap text-[16px] text-fg-muted transition-colors duration-[160ms] hover:text-white"
                 >
                   {item.label}
                   {children && (
@@ -74,15 +74,15 @@ export function Nav() {
 
         <MobileMenu />
 
-        <div className="flex items-center gap-2 max-md:hidden">
+        {/* One button only. Brief §6.3: a heavier right block outweighs the
+            wordmark and visually breaks the viewport-centred menu — with two
+            buttons the centred menu and this block genuinely overlap at every
+            width. Documentation moved into the Resources dropdown. */}
+        <div className="flex items-center max-md:hidden">
           <Button
-            href={copy.nav.secondary.href}
-            variant="secondary"
-            className="h-[38px] px-4 text-[15px]"
+            href={copy.nav.primary.href}
+            className="h-[38px] whitespace-nowrap px-4 text-[15px]"
           >
-            {copy.nav.secondary.label}
-          </Button>
-          <Button href={copy.nav.primary.href} className="h-[38px] px-4 text-[15px]">
             {copy.nav.primary.label}
           </Button>
         </div>

@@ -21,6 +21,7 @@ export const copy = {
         label: 'Resources',
         href: '#',
         children: [
+          { label: 'Documentation', href: '/docs' },
           { label: 'ERC-8056', href: 'https://eips.ethereum.org/EIPS/eip-8056', external: true },
           { label: 'Chainlink feeds', href: 'https://docs.chain.link/data-feeds/tokenized-equity-feeds/robinhood', external: true },
           { label: 'Robinhood Chain docs', href: 'https://docs.robinhood.com/chain/stock-tokens/', external: true },

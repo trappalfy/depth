@@ -99,6 +99,12 @@ export const copy = {
         { title: 'It cannot tell a closed market from a broken oracle', body: 'Solidity has no calendar. Both cases resolve to the same conservative behaviour, so the ambiguity is safe — silence is never served as a fresh price.' },
       ],
     },
+    contact: {
+      heading: 'Talk to us before you need this',
+      lede: 'Depth ships before the failure it prevents. If you run a lending market on tokenized equities, the useful conversation is now — while the interface can still change to fit how you read an oracle.',
+      cta: 'Email us',
+      secondary: 'Open the console',
+    },
   },
   app: {
     title: 'Console',

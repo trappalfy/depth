@@ -1,4 +1,5 @@
 import { Hero } from '@/components/hero/Hero'
+import { Contact } from '@/components/sections/Contact'
 import { ConventionMatrix } from '@/components/sections/ConventionMatrix'
 import { Integration } from '@/components/sections/Integration'
 import { Limits } from '@/components/sections/Limits'
@@ -19,6 +20,7 @@ export default async function Page() {
       <Mechanism />
       <Integration />
       <Limits />
+      <Contact />
     </main>
   )
 }

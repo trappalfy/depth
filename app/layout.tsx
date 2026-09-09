@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Archivo, Geist_Mono } from 'next/font/google'
 import { copy } from '@/content/copy.en'
 import './globals.css'
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
+const archivo = Archivo({ subsets: ['latin'], variable: '--font-archivo' })
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono' })
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${geistMono.variable}`}>
       <body className="bg-ink-800 text-fg font-sans antialiased">{children}</body>
     </html>
   )

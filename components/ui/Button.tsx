@@ -1,16 +1,5 @@
 import Link from 'next/link'
-
-type Variant = 'primary' | 'secondary' | 'text'
-
-const base = 'inline-flex items-center justify-center transition-colors duration-[160ms]'
-
-const styles: Record<Variant, string> = {
-  primary:
-    'rounded-[var(--radius-pill)] bg-white text-ink-900 hover:bg-[#EDEDED] active:scale-[.985] font-semibold',
-  secondary:
-    'rounded-[var(--radius-pill)] bg-white/[0.06] text-white hover:bg-white/[0.10] font-semibold',
-  text: 'text-white underline decoration-white/25 hover:decoration-white underline-offset-4',
-}
+import { buttonBase, buttonVariants, type ButtonVariant } from '@/components/ui/buttonStyles'
 
 export function Button({
   href,
@@ -19,12 +8,12 @@ export function Button({
   children,
 }: {
   href: string
-  variant?: Variant
+  variant?: ButtonVariant
   className?: string
   children: React.ReactNode
 }) {
   return (
-    <Link href={href} className={`${base} ${styles[variant]} ${className}`}>
+    <Link href={href} className={`${buttonBase} ${buttonVariants[variant]} ${className}`}>
       {children}
     </Link>
   )

@@ -14,6 +14,9 @@ interface ConnectorLike {
 /** The catch-all connector for browsers that never announced themselves. */
 const GENERIC_INJECTED_ID = 'injected'
 
+/** "Injected" is jargon on a button. This is the same thing, in English. */
+const GENERIC_INJECTED_NAME = 'Browser wallet'
+
 /**
  * Every connector id that is an SDK rather than an EIP-6963 discovery. It lists
  * more than we configure today: the set is what tells discovery apart from
@@ -37,6 +40,12 @@ export interface PickOptions {
    * works inside the Safe app; anywhere else it is a button that cannot connect.
    */
   inIframe?: boolean
+  /**
+   * Whether `window.ethereum` actually exists. wagmi always carries the generic
+   * injected connector whether or not anything injected, so without this the
+   * modal offers a button that cannot possibly connect.
+   */
+  hasInjectedProvider?: boolean
 }
 
 /**
@@ -45,14 +54,14 @@ export interface PickOptions {
  * EIP-6963 gives one connector per installed extension, each with its own name
  * and icon, so those come first. The hand-configured connectors follow, minus
  * any that discovery already covers. The generic injected fallback appears only
- * when discovery found nothing at all — otherwise it lists a wallet twice, once
- * under a meaningless name.
+ * when discovery found nothing AND something really did inject a provider —
+ * otherwise it is either a duplicate under a meaningless name, or a dead button.
  */
 export function pickWallets(
   connectors: readonly ConnectorLike[],
   options: PickOptions = {},
 ): WalletChoice[] {
-  const { inIframe = false } = options
+  const { inIframe = false, hasInjectedProvider = false } = options
 
   const discovered = connectors.filter((c) => c.id !== GENERIC_INJECTED_ID && !SDK_IDS.has(c.id))
   const discoveredIds = new Set(discovered.map((c) => c.id))
@@ -66,11 +75,13 @@ export function pickWallets(
     })
 
   const fallback =
-    discovered.length === 0 ? connectors.filter((c) => c.id === GENERIC_INJECTED_ID) : []
+    discovered.length === 0 && hasInjectedProvider
+      ? connectors.filter((c) => c.id === GENERIC_INJECTED_ID)
+      : []
 
   return [...discovered, ...fallback, ...configured].map((c) => ({
     id: c.id,
-    name: c.name,
+    name: c.id === GENERIC_INJECTED_ID ? GENERIC_INJECTED_NAME : c.name,
     icon: c.icon,
   }))
 }

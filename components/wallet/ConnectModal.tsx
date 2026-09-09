@@ -14,7 +14,10 @@ export function ConnectModal({ onClose }: { onClose: () => void }) {
   // Safe only works when the page is embedded in the Safe app. Checking the
   // frame here keeps pickWallets pure and testable.
   const inIframe = mounted && window.self !== window.top
-  const wallets = pickWallets(connectors, { inIframe })
+  // wagmi always carries the generic injected connector, injected or not. Ask
+  // the browser whether anything actually did, so we never render a dead row.
+  const hasInjectedProvider = mounted && 'ethereum' in window
+  const wallets = pickWallets(connectors, { inIframe, hasInjectedProvider })
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

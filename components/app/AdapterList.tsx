@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import type { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { DeployButton } from '@/components/app/DeployButton'
-import { PreviewBadge } from '@/components/app/PreviewTag'
 import { StatusPill } from '@/components/ui/StatusPill'
 import { useDeployment } from '@/components/wallet/useDeployment'
 import { copy } from '@/content/copy.en'
@@ -66,12 +65,9 @@ export function AdapterList({ initial }: { initial: Snapshot }) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-4">
-        <h1 className="text-[40px] font-semibold leading-[1.1] tracking-[-0.02em] max-md:text-[28px]">
-          {copy.app.list.heading}
-        </h1>
-        {state.kind !== 'live' && <PreviewBadge />}
-      </div>
+      <h1 className="text-[40px] font-semibold leading-[1.1] tracking-[-0.02em] max-md:text-[28px]">
+        {copy.app.list.heading}
+      </h1>
       <p className="mt-6 max-w-[68ch] text-[17px] text-fg-muted">{copy.app.list.lede}</p>
 
       {/* The factory IS the canonical parameter set: once it is live the console

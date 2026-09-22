@@ -32,8 +32,8 @@ export default async function BoardPage() {
         </h1>
         <p className="mt-6 max-w-[68ch] text-[17px] text-fg-muted">
           Every covered ticker on Robinhood Chain, classified the way the adapter would classify
-          it. The adapter is not deployed yet — this page runs the same rules off-chain against
-          live data.
+          it. This page runs those rules off chain against live data; the adapters themselves run
+          them on chain.
         </p>
         <p className="mt-6">
           <Link

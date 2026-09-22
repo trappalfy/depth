@@ -19,7 +19,7 @@ export const copy = {
         ],
       },
       { label: 'Live data', href: '/board' },
-      { label: 'Trust model', href: '#limits' },
+      { label: 'Token', href: '/token' },
       {
         label: 'Resources',
         children: [
@@ -340,6 +340,46 @@ export const copy = {
       fromDocs: 'Open the console',
     },
   },
+  token: {
+    // INTERIM — the one paragraph on this page that is an opinion rather than a
+    // reading. Replace it with what the token actually does before launch.
+    heading: 'Token',
+    lede: 'Depth has not launched a token. When it does, its contract address will be published here and nowhere else.',
+
+    address: {
+      heading: 'Contract address',
+      pending: 'Not deployed',
+      pendingNote:
+        'There is no Depth token on any chain today. Any address presented as one is a fraud, whoever sent it.',
+      copy: 'Copy',
+      copied: 'Copied',
+      explorer: 'View on the explorer',
+    },
+
+    facts: {
+      heading: 'Read from the contract',
+      lede: 'Every field below is read from the token contract itself at the block shown — not typed into this page.',
+      network: 'Network',
+      symbol: 'Symbol',
+      decimals: 'Decimals',
+      supply: 'Total supply',
+      launchedAt: 'Deployed at block',
+      pending: '—',
+      pendingNote: 'Appears the moment the contract exists.',
+      unreadable:
+        'The configured address did not answer as a token contract. Nothing is shown rather than something invented.',
+    },
+
+    verify: {
+      heading: 'How to check you have the right address',
+      points: [
+        'This page is the only place Depth publishes the address. It is read from the chain, it carries the block it was deployed at, and it changes only by a commit to the public repository.',
+        'We will never send you an address in a direct message, and we will never ask you to connect a wallet to claim anything.',
+        'Before you trade, compare the address in your wallet against the one here, character by character — the first four and the last four are not enough.',
+      ],
+    },
+  },
+
   footer: {
     columns: [
       {
@@ -348,6 +388,7 @@ export const copy = {
           { label: 'The problem', href: '/#problem' },
           { label: 'How it works', href: '/#mechanism' },
           { label: 'Trust model', href: '/#limits' },
+          { label: 'Token', href: '/token' },
           { label: 'Integration', href: '/docs' },
         ],
       },

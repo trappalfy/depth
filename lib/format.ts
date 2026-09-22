@@ -37,3 +37,13 @@ export function heartbeatFraction(ageSeconds: number, heartbeatSeconds: number):
 export function shortAddress(a: string): string {
   return `${a.slice(0, 6)}…${a.slice(-4)}`
 }
+
+/**
+ * An age as a phrase, not a duration. `formatAge` returns "just now" under a
+ * minute, so the call sites that appended " ago" to it read "just now ago";
+ * the whole phrase belongs in one place.
+ */
+export function formatAgo(seconds: number): string {
+  const age = formatAge(seconds)
+  return age === 'just now' ? age : `${age} ago`
+}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   formatAge,
+  formatAgo,
   formatPrice,
   formatMultiplier,
   heartbeatFraction,
@@ -66,5 +67,18 @@ describe('heartbeatFraction', () => {
 describe('shortAddress', () => {
   it('elides the middle', () => {
     expect(shortAddress('0x322F0929c4625eD5bAd873c95208D54E1c003b2d')).toBe('0x322F…3b2d')
+  })
+})
+
+describe('formatAgo', () => {
+  it('does not say "just now ago"', () => {
+    expect(formatAgo(0)).toBe('just now')
+    expect(formatAgo(59)).toBe('just now')
+  })
+
+  it('says ago for everything a duration can be said about', () => {
+    expect(formatAgo(60)).toBe('1m ago')
+    expect(formatAgo(3_600)).toBe('1h 0m ago')
+    expect(formatAgo(90_000)).toBe('1d 1h ago')
   })
 })

@@ -10,7 +10,7 @@ import { useDeployment } from '@/components/wallet/useDeployment'
 import { copy } from '@/content/copy.en'
 import { adapterFactoryAbi } from '@/lib/adapterAbi'
 import { ADAPTER_PARAMS } from '@/lib/adapterParams'
-import { formatAge, shortAddress } from '@/lib/format'
+import { formatAge, formatAgo, shortAddress } from '@/lib/format'
 import type { Snapshot } from '@/lib/snapshot'
 
 /** Two reads per asset: the deterministic address, and whether it exists yet. */
@@ -95,7 +95,7 @@ export function AdapterList({ initial }: { initial: Snapshot }) {
       <p className="mt-10 text-[12px] text-fg-faint">
         Read from Robinhood Chain mainnet (chain {initial.chainId}) at block{' '}
         <span className="font-mono">{initial.blockNumber}</span>,{' '}
-        {formatAge(Math.max(0, now - initial.observedAt))} ago.
+        {formatAgo(Math.max(0, now - initial.observedAt))}.
       </p>
 
       <div className="mt-6 overflow-x-auto">

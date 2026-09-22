@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { StatusPill } from '@/components/ui/StatusPill'
-import { formatAge, formatMultiplier, formatPrice, shortAddress } from '@/lib/format'
+import { formatAge, formatAgo, formatMultiplier, formatPrice, shortAddress } from '@/lib/format'
 import type { Snapshot } from '@/lib/snapshot'
 
 export function BoardTable({ initial }: { initial: Snapshot }) {
@@ -31,7 +31,7 @@ export function BoardTable({ initial }: { initial: Snapshot }) {
       <p className="text-[12px] text-fg-faint">
         Read from Robinhood Chain mainnet (chain {snapshot.chainId}) at block{' '}
         <span className="font-mono">{snapshot.blockNumber}</span>,{' '}
-        {formatAge(Math.max(0, now - snapshot.observedAt))} ago.
+        {formatAgo(Math.max(0, now - snapshot.observedAt))}.
       </p>
 
       <div className="mt-6 overflow-x-auto">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { copy } from '@/content/copy.en'
-import { formatAge } from '@/lib/format'
+import { formatAge, formatAgo } from '@/lib/format'
 import type { Snapshot } from '@/lib/snapshot'
 import { buildStalenessCurve } from '@/lib/staleness'
 
@@ -110,7 +110,7 @@ export function StalenessChart({ snapshot }: { snapshot: Snapshot }) {
       </svg>
 
       <figcaption className="mt-4 text-[12px] text-fg-faint">
-        {copy.sections.problem.chartCaption} {formatAge(Math.max(0, now - snapshot.observedAt))} ago,
+        {copy.sections.problem.chartCaption} {formatAgo(Math.max(0, now - snapshot.observedAt))},
         at block <span className="font-mono">{snapshot.blockNumber}</span>.
       </figcaption>
     </figure>

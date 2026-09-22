@@ -131,7 +131,9 @@ Robinhood Chain mainnet, chain id **4663**, RPC
 
 | | |
 |---|---|
-| AdapterFactory | not deployed yet |
+| AdapterFactory | `0xcD70a518a78807C355A4B9aB8676Bd7C848806D1` |
+| deployed at | block 69,889,995 — 22 September 2026 |
+| cost | 1,837,722 gas, 0.0000962 ETH |
 
 Token and feed addresses for all 194 assets live in `lib/assets.generated.ts`,
 generated from the chain rather than typed by hand.

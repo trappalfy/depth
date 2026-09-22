@@ -100,6 +100,18 @@ export default async function TokenPage() {
                 <p className="mt-4 max-w-[68ch] text-[15px] text-fg-muted">
                   {reading.kind === 'unreadable' ? t.facts.unreadable : t.address.pendingNote}
                 </p>
+                <p className="mt-4 max-w-[68ch] text-[15px] text-fg-muted">
+                  {t.address.announce.before}
+                  <a
+                    href={t.address.announce.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-white underline decoration-white/25 underline-offset-4 hover:decoration-white"
+                  >
+                    {t.address.announce.handle}
+                  </a>
+                  {t.address.announce.after}
+                </p>
               </div>
             )}
           </div>

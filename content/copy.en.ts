@@ -351,6 +351,18 @@ export const copy = {
       pending: 'Not deployed',
       pendingNote:
         'There is no Depth token on any chain today. Any address presented as one is a fraud, whoever sent it.',
+      // The launch post lands before the site does: the address reaches this
+      // page only through a commit and a deploy, which takes minutes. Saying
+      // so is what stops the gap being used against a reader — an impostor
+      // whose whole pitch is "the site has not updated yet" needs that gap to
+      // be unexplained.
+      announce: {
+        before: 'The launch is announced first on X, from ',
+        handle: '@DepthOracle_',
+        href: 'https://x.com/DepthOracle_',
+        after:
+          ' and nowhere else. This page can trail that post by about ten minutes, because the address reaches it only through a commit and a deploy. An address missing here is never a reason to trust one you were sent.',
+      },
       copy: 'Copy',
       copied: 'Copied',
       explorer: 'View on the explorer',
@@ -373,7 +385,7 @@ export const copy = {
     verify: {
       heading: 'How to check you have the right address',
       points: [
-        'This page is the only place Depth publishes the address. It is read from the chain, it carries the block it was deployed at, and it changes only by a commit to the public repository.',
+        'Depth publishes the address in exactly two places: @DepthOracle_ on X, and this page. Here it is read from the chain, it carries the block it was deployed at, and it changes only by a commit to the public repository.',
         'We will never send you an address in a direct message, and we will never ask you to connect a wallet to claim anything.',
         'Before you trade, compare the address in your wallet against the one here, character by character — the first four and the last four are not enough.',
       ],

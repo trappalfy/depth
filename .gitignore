@@ -7,3 +7,9 @@ out
 next-env.d.ts
 .superpowers/
 *.log
+
+# Foundry: build output, and test-only dependencies fetched by git
+contracts/out
+contracts/cache
+contracts/dependencies
+contracts/broadcast

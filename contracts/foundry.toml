@@ -12,3 +12,7 @@ via_ir = false
 
 [soldeer]
 remappings_generate = false
+
+[rpc_endpoints]
+# The public endpoint, no key needed. Fork tests read RPC_URL first if it is set.
+robinhood = "https://rpc.mainnet.chain.robinhood.com"
